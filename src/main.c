@@ -8,7 +8,7 @@ int main(void)
 	IntVector *v = int_vector_new(3);
 	printf("vector V = \npointer:%p\nsize:%d\ncapacity:%d\n", v->pointer, v->size, v->capacity);
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < v->capacity; i++) {
 		int_vector_set_item(v, i, i + 1);
 		v->size++;
 		printf("%d\t", v->pointer[i]);
@@ -17,6 +17,7 @@ int main(void)
 	printf("size of V after set_ item: %d", v->size);
 	new_Line();
 	//
+	/*
 	IntVector *a = int_vector_copy(v);
 	printf("\nvector A = \npointer:%p\nsize:%d\ncapacity:%d\n", a->pointer, a->size, a->capacity);
 	for (int i = 0; i < v->size; i++) {
@@ -24,7 +25,7 @@ int main(void)
 	}
 	new_Line();
 	new_Line();
-	/*
+	*/
 	int_vector_free(v);
 	
 	printf("vector V = \npointer:%p\nsize:%d\ncapacity:%d\n", v->pointer,v->size,v->capacity);
@@ -33,7 +34,7 @@ int main(void)
 		printf("%d\t", v->pointer[i]);
 	}
 	new_Line();
-	*/
+	/*
 	int_vector_free(a);
 	printf("a: after free\n");
 	for (int i = 0; i < a->size; i++) {
@@ -75,4 +76,5 @@ int main(void)
 	printf("size = %d. capacity = %d.\n", v->size, v->capacity);
 	printf("%d\n", int_vector_resize(v, 10));
 	printf("size = %d. capacity = %d.\n", v->size, v->capacity);
+	*/
 }

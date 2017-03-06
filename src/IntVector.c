@@ -24,7 +24,10 @@ IntVector *int_vector_copy(const IntVector *v)
 
 void int_vector_free(IntVector *v)
 {
+	v->size = 0;
+	v->capacity = 0;
 	free(v->pointer);
+	v->pointer = NULL;
 	free(v);
 }
 
@@ -60,7 +63,6 @@ int int_vector_push_back(IntVector *v, int item)
 		v->pointer = realloc(v->pointer, v->capacity * sizeof(int));
 		if (v->pointer == NULL)
 			return -1;
-			printf("!!!!%d:%d\n", item, v->size);
 		v->pointer[v->size] = item;
 		v->size++;
 	}
