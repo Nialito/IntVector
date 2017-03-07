@@ -2,32 +2,42 @@
 #include <stdlib.h>
 #include <string.h>
 #include "IntVector.h"
+
 IntVector *int_vector_new(size_t initial_capacity)
 {
-	IntVector *v = malloc(sizeof(IntVector));
-	v->pointer = malloc(initial_capacity * sizeof(int));
-	v->size = 0;
-	v->capacity = initial_capacity;
-	return v;
+	IntVector *t = malloc(sizeof(IntVector));
+	if (t == NULL)
+		return NULL;
+	t->pointer = malloc(initial_capacity * sizeof(int));
+	if (t->pointer == NULL) {
+		free(t);
+		return NULL;
+	}
+	t->size = 0;
+	t->capacity = initial_capacity;
+	return t;
 }
 
 
 IntVector *int_vector_copy(const IntVector *v)
 {
-	IntVector *a = malloc(sizeof(IntVector));
-	a->pointer = malloc(v->capacity * sizeof(int));
-	memcpy(a->pointer, v->pointer, sizeof(int) * v->capacity);
-	a->size = v->size;
-	a->capacity = v->capacity;
-	return a;
+	IntVector *t = malloc(sizeof(IntVector));
+	if (t == NULL)
+		return NULL;
+	t->pointer = malloc(v->capacity * sizeof(int));
+	if (t->pointer == NULL) {
+		free(t);
+		return NULL;
+	}
+	memcpy(t->pointer, v->pointer, sizeof(int) * v->capacity);
+	t->size = v->size;
+	t->capacity = v->capacity;
+	return t;
 }
 
 void int_vector_free(IntVector *v)
 {
-	v->size = 0;
-	v->capacity = 0;
 	free(v->pointer);
-	v->pointer = NULL;
 	free(v);
 }
 
@@ -40,6 +50,7 @@ void int_vector_set_item(IntVector *v, size_t index, int item)
 {
 	if (index <= v->capacity)
 		v->pointer[index] = item;
+		v->size++;
 }
 
 size_t int_vector_get_size(const IntVector *v)
@@ -60,9 +71,11 @@ int int_vector_push_back(IntVector *v, int item)
 	}
 	else {
 		v->capacity *= 2;
-		v->pointer = realloc(v->pointer, v->capacity * sizeof(int));
-		if (v->pointer == NULL)
-			return -1;
+		// FIXME ready
+		int *t = realloc(v->pointer, v->capacity * sizeof(int));
+			if (t == NULL)
+				return -1;
+		v->pointer = t;
 		v->pointer[v->size] = item;
 		v->size++;
 	}
@@ -73,7 +86,6 @@ void int_vector_pop_back(IntVector *v)
 {
 	if (v->size != 0) {
 		v->size--;
-		v->pointer[v->size] = 0;
 	}
 }
 
@@ -81,26 +93,29 @@ int int_vector_shrink_to_fit(IntVector *v)
 {
 	if (v->size < v->capacity) {
 		v->capacity = v->size;
-		v->pointer = realloc(v->pointer, v->size * sizeof(int));
+		int *t = realloc(v->pointer, v->size * sizeof(int));
+			if (t == NULL)
+				return -1;
+		v->pointer = t;
 		return 0;
 	}
 	return -1;
 }
+
 int int_vector_resize(IntVector *v, size_t new_size)
 {
 	if (new_size == v->size)
 		return 0;
 	if (new_size > v->size) {
-		v->pointer = realloc(v->pointer, new_size * sizeof(int));
-		if (v->pointer == NULL)
+		// FIXME ready
+		int *t = realloc(v->pointer, new_size * sizeof(int));
+		if (t == NULL)
 			return -1;
+		v->pointer = t;
 		for (int i = new_size - v->size; i < new_size; i++)
 			v->pointer[i] = 0;
-	} else if (new_size < v->size) {
-		return int_vector_shrink_to_fit(v);
 	}
 	v->size = new_size;
-	int_vector_reserve(v, new_size);
 	return 0;
 }
 
@@ -108,8 +123,11 @@ int int_vector_reserve(IntVector *v, size_t new_capacity)
 {
 	if (new_capacity > v->capacity) {
 		v->capacity = new_capacity;
+		int *t = realloc(v->pointer, new_capacity * sizeof(int));
+		if (t == NULL)
+			return -1;
+		v->pointer = t;
 		return 0;
 	}
 	return -1;
 }
-
