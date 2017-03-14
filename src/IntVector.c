@@ -66,7 +66,7 @@ size_t int_vector_get_capacity(const IntVector *v)
 int int_vector_push_back(IntVector *v, int item)
 {
 	if (v->size < v->capacity){
-		v->pointer[v->size + 1] = item;
+		v->pointer[v->size] = item;
 		v->size++;
 	}
 	else {
@@ -84,9 +84,8 @@ int int_vector_push_back(IntVector *v, int item)
 
 void int_vector_pop_back(IntVector *v)
 {
-	if (v->size != 0) {
+	if (v->size != 0) 
 		v->size--;
-	}
 }
 
 int int_vector_shrink_to_fit(IntVector *v)

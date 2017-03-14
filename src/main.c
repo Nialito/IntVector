@@ -16,12 +16,14 @@ int main(void)
 		v->size++;
 		printf("%d\t", v->pointer[i]);
 	}
-	*/
-	//
-	for (int i = 0; i < 3; i++){
-		int_vector_set_item(v, i, i + 1);
-		printf("%d\t", int_vector_get_item(v, i));
+	Answer -> */
+	for (int i = 0; i < int_vector_get_capacity(v); i++){
+		int_vector_push_back(v, i);
 	}
+	for (int i = 0; i < int_vector_get_size(v); i++){
+		printf(":%d\t", int_vector_get_item(v, i));
+	}
+	new_Line();
 	//
 	new_Line();
 	printf("size of V after set_ item: %d", v->size);
@@ -54,11 +56,9 @@ int main(void)
 	new_Line();
 
 	printf("v:\n");
-	for (int i = 0; i < v->size; i++) {
-		int_vector_set_item(v, i, i + 1);
-		printf("%d\t", int_vector_get_item(v, i));
+	for (int i = 0; i < int_vector_get_size(v); i++){
+		printf("--%d\t", int_vector_get_item(v, i));
 	}
-	
 	new_Line();
 	
 	//
@@ -76,7 +76,7 @@ int main(void)
 	int_vector_pop_back(v);
 	for (int i = 0; i < v->size; i++)
 		printf("!%d\t", int_vector_get_item(v, i));
-		new_Line();
+	new_Line();
 	
 	printf("shrink: %d", int_vector_shrink_to_fit(v));
 	new_Line();
